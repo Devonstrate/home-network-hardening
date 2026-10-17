@@ -1,0 +1,18 @@
+# /etc/systemd/system/ids-quarantine.service
+# Set User= to the account that owns the key and topic file.
+# Change DRY_RUN=1 to DRY_RUN=0 only after a review period.
+
+[Unit]
+Description=Suricata alert notifier with guarded quarantine
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+User=labuser
+Environment=DRY_RUN=1
+ExecStart=/usr/bin/python3 /home/labuser/services/suricata/scripts/ids_quarantine.py
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

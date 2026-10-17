@@ -1,0 +1,20 @@
+# /usr/share/nftables.d/table-post/30-quarantine.nft
+# Included automatically by fw4 inside table inet fw4.
+# Add it to /etc/sysupgrade.conf so it survives firmware updates.
+
+set quarantine {
+	type ipv4_addr
+	flags timeout
+	timeout 2h
+}
+
+chain quarantine_fwd {
+	type filter hook forward priority filter - 10; policy accept;
+	ip saddr @quarantine counter drop
+	ip daddr @quarantine counter drop
+}
+
+chain quarantine_in {
+	type filter hook input priority filter - 10; policy accept;
+	ip saddr @quarantine counter drop
+}

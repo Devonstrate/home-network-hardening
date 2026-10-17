@@ -1,0 +1,16 @@
+# /etc/logrotate.d/suricata
+# copytruncate avoids a reopen signal. The container's internal user
+# (UID 998) could not reopen fresh files owned by the host user,
+# which silently stopped all logging.
+
+/home/labuser/services/suricata/logs/*.json
+/home/labuser/services/suricata/logs/*.log {
+    daily
+    rotate 7
+    missingok
+    compress
+    delaycompress
+    notifempty
+    copytruncate
+    su root root
+}
